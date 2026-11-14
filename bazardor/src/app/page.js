@@ -1,69 +1,134 @@
-import Image from "next/image";
+import { getAllProducts } from "@/lib/api";
+import { calculatePriceChange, toBanglaNumber } from "@/lib/utils";
+import ProductCard from "@/components/ProductCard";
 
-export default function Home() {
+export default async function HomePage() {
+  const products = await getAllProducts();
+
+  const productsWithChange = products.map((product) => ({
+    ...product,
+    changeInfo: calculatePriceChange(product.today, product.yesterday),
+  }));
+
+  // Section A: আজ দাম বেড়েছে (Top 6 risers)
+  const topRisers = productsWithChange
+    .filter((p) => p.changeInfo.percent > 0)
+    .sort((a, b) => b.changeInfo.percent - a.changeInfo.percent)
+    .slice(0, 6);
+
+  // Section B: আজ দাম কমেছে (Top 6 fallers)
+  const topFallers = productsWithChange
+    .filter((p) => p.changeInfo.percent < 0)
+    .sort((a, b) => a.changeInfo.percent - b.changeInfo.percent)
+    .slice(0, 6);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.js
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="max-w-6xl mx-auto px-4 py-6 sm:py-10 space-y-12 sm:space-y-14">
+      {/* 🅱️ Hero / Banner সেকশন (Penpot ডিজাইন অনুযায়ী) */}
+      <section className="bg-gradient-to-r from-emerald-50/90 via-green-50/60 to-emerald-50/40 border border-emerald-100 rounded-3xl p-6 sm:p-10 lg:px-14 lg:py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          {/* বাম পাশ */}
+          <div className="space-y-4 text-center md:text-left">
+            <span className="inline-block text-xs sm:text-sm font-semibold text-emerald-700 bg-emerald-100/80 px-3 py-1 rounded-full">
+              দৈনিক বাজার দর তালিকা
+            </span>
+
+            <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-gray-900 leading-tight">
+              আজকের বাজারের দাম এক নজরে
+            </h1>
+
+            <p className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-lg mx-auto md:mx-0">
+              নিত্যপ্রয়োজনীয় চাল, ডাল, তেল, সবজি, মাছ ও মাংসের প্রতিদিনের
+              হালনাগাদ খুচরা বাজার দর জানুন সহজেই।
+            </p>
+
+            <div className="pt-2 flex justify-center md:justify-start">
+              <a
+                href="#সব-পণ্য"
+                className="btn btn-sm sm:btn-md bg-emerald-600 hover:bg-emerald-700 text-white border-none rounded-xl px-7 font-semibold shadow-xs"
+              >
+                পণ্য দেখুন ↓
+              </a>
+            </div>
+          </div>
+
+          {/* ডান পাশ: হিরো ইমেজ */}
+          <div className="flex justify-center md:justify-end">
+            <img
+              src="/images/bazar-hero.png"
+              alt="আজকের বাজারের দাম"
+              className="w-64 sm:w-80 md:w-96 h-auto object-contain drop-shadow-xs"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Section A: আজ দাম বেড়েছে ▲ */}
+      {topRisers.length > 0 && (
+        <section className="space-y-5">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2">
+              <span className="text-emerald-600 text-base">▲</span>
+              <span>আজ দাম বেড়েছে</span>
+            </h2>
+            <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
+              গতকালের তুলনায় যেসব পণ্যের দাম সবচেয়ে বেশি বেড়েছে
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+            {topRisers.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Section B: আজ দাম কমেছে ▼ */}
+      {topFallers.length > 0 && (
+        <section className="space-y-5">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2">
+              <span className="text-rose-600 text-base">▼</span>
+              <span>আজ দাম কমেছে</span>
+            </h2>
+            <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
+              গতকালের তুলনায় যেসব পণ্যের দাম সবচেয়ে বেশি কমেছে
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+            {topFallers.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Section C: সব পণ্য (#সব-পণ্য অ্যাঙ্কর আইডিসহ) */}
+      <section id="সব-পণ্য" className="scroll-mt-32 space-y-5">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+            সব পণ্য
+          </h2>
+          <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
+            মোট {toBanglaNumber(products.length)}টি নিত্যপ্রয়োজনীয় পণ্যের আজকের
+            বাজার দর
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+
+        {products.length === 0 ? (
+          <div className="bg-white rounded-2xl border border-gray-200 p-10 text-center text-gray-500">
+            কোনো পণ্যের তথ্য পাওয়া যায়নি। অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন।
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
 }
