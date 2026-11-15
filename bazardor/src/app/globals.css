@@ -1,11 +1,13 @@
 @import "tailwindcss";
-@plugin "daisyui" {
-  themes: light --default;
-}
+@plugin "daisyui";
 
 @keyframes marquee {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .animate-marquee {
