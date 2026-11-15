@@ -126,4 +126,16 @@ export async function getAllCategories() {
   const data = await fetchWithFallback("/categories");
   return Array.isArray(data) && data.length > 0 ? data : FALLBACK_CATEGORIES;
 }
+export async function getProductsByCategory(slug) {
+  const data = await fetchWithFallback(`/products?category=${slug}`);
+  if (Array.isArray(data) && data.length > 0) {
+    return data;
+  }
+  const catData = await fetchWithFallback(`/categories/${slug}`);
+  if (Array.isArray(catData) && catData.length > 0) {
+    return catData;
+  }
+  const all = await getAllProducts();
+  return all.filter((p) => p.category === slug);
+}
 

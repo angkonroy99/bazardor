@@ -1,36 +1,21 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🛒 বাজার দর (BazarDor)
 
-## Getting Started
+প্রতিদিনের নিত্যপ্রয়োজনীয় পণ্যের হালনাগাদ খুচরা ও পাইকারি বাজার দর জানার একটি আধুনিক ও রেসপন্সিভ ওয়েব অ্যাপ্লিকেশন।
 
-First, run the development server:
+## 🚀 Live Link
+- **Live Site:** [আপনার Vercel লাইভ লিংক এখানে বসাবেন]
+- **GitHub Repository:** [আপনার GitHub রিপোজিটরি লিংক এখানে বসাবেন]
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Key Features (প্রধান বৈশিষ্ট্যসমূহ)
+1. **হালনাগাদ বাজার দর ও প্রাইস টিকার:** হোম পেজের উপরে চলমান লাইভ প্রাইস টিকার (Marquee) এবং আজকের বাংলা তারিখ প্রদর্শন।
+2. **দামের ওঠানামা বিশ্লেষণ:** গতকালের তুলনায় সবচেয়ে বেশি দাম বেড়েছে (Top 6 Risers ▲) এবং সবচেয়ে বেশি দাম কমেছে (Top 6 Fallers ▼) এমন পণ্যের আলাদা সেকশন।
+3. **ক্যাটাগরি ফিল্টারিং ও বাংলা সংখ্যায় সর্টিং:** ৮টি ভিন্ন ক্যাটাগরি অনুযায়ী পণ্য দেখা এবং বাংলা সংখ্যা সঠিকভাবে নিউমেরিক ভ্যালুতে রূপান্তর করে দাম অনুযায়ী (কম থেকে বেশি / বেশি থেকে কম) সর্ট করার সুবিধা।
+4. **সুরক্ষিত পণ্যের বিস্তারিত ও বাজারভিত্তিক তালিকা:** লগইন করা ব্যবহারকারীদের জন্য পণ্যের সর্বনিম্ন, গড় ও সর্বোচ্চ দাম এবং ঢাকার বিভিন্ন বাজারের তুলনামূলক মূল্য তালিকা।
+5. **পূর্ণাঙ্গ অথেনটিকেশন ও প্রোফাইল আপডেট:** BetterAuth ব্যবহার করে ইমেইল/পাসওয়ার্ড এবং Google ও GitHub সোশ্যাল লগইন, টোস্ট নোটিফিকেশন এবং আলাদা রুটে প্রোফাইলের নাম পরিবর্তনের সুবিধা।
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🛠️ Technologies Used
+- **Framework:** Next.js (App Router)
+- **Language:** JavaScript
+- **Styling:** Tailwind CSS & DaisyUI
+- **Authentication:** BetterAuth (Email/Password, Google & GitHub OAuth)
+- **Icons & Notifications:** Lucide React & React Hot Toast
